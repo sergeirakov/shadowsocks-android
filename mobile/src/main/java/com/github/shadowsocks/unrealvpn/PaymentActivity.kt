@@ -29,16 +29,13 @@ class PaymentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_payment)
 
         val webview = findViewById<WebView>(R.id.webview)
-        val baseUrl = getString(R.string.unreal_vpn_payment_url)
         val keyEncoded = UnrealVpnStore.getAccessUrl(this)
         val keyId = UnrealVpnStore.getId(this)
 
         webview.webViewClient = listenerClient
         webview.getSettings().javaScriptEnabled = true
         webview.getSettings().javaScriptCanOpenWindowsAutomatically = true
-        val url = "$baseUrl?key=$keyEncoded&key_id=$keyId"
-        webview.loadUrl(url)
-        Timber.d(url)
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }

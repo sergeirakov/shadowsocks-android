@@ -38,7 +38,6 @@ class UnrealVPNActivity : BridgeActivity() {
 
         tryCreateAndRegisterKey()
         initConnectionButton()
-        initLimits()
         initEmail()
         showTraffic(0)
     }
@@ -148,38 +147,6 @@ class UnrealVPNActivity : BridgeActivity() {
             } else {
                 createSnackbar(getString(R.string.unreal_vpn_failed_to_init)).show()
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initLimits()
-    }
-
-    private fun initLimits() {
-        val removeLimitations = findViewById<TextView>(R.id.removeLimitations)
-        val limits = findViewById<TextView>(R.id.limitStatus)
-
-        val unlimitedUntil = UnrealVpnStore.getUnlimitedUntil(this)
-        val isUnlimited = unlimitedUntil > System.currentTimeMillis()
-        removeLimitations.text = buildSpannedString {
-            if (isUnlimited) {
-                append(getString(R.string.unreal_vpn_extend_limits), UnderlineSpan(), 0)
-            } else {
-                append(getString(R.string.unreal_vpn_remove_limitations), UnderlineSpan(), 0)
-            }
-        }
-
-        if (isUnlimited) {
-            limits.text = getString(
-                R.string.unreal_vpn_unlimited,
-                formatter.format(unlimitedUntil)
-            )
-        } else {
-            limits.setText(R.string.unreal_vpn_free_limit)
-        }
-        removeLimitations.setOnClickListener {
-            startActivity(Intent(this, PaymentActivity::class.java))
         }
     }
 
