@@ -87,10 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
         android:background="?selectableItemBackground"
         android:text="@string/unreal_vpn_remove_limitations"
         android:textAppearance="@style/UnrealVPN.RemoveLimits"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/limitStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
