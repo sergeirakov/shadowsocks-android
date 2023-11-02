@@ -189,16 +189,24 @@ class UnrealVPNActivity : BridgeActivity() {
         emailView.text = buildSpannedString { append(email, UnderlineSpan(), 0) }
         emailView.setOnClickListener {
             val accessUrl = UnrealVpnStore.getAccessUrl(this@UnrealVPNActivity)
+            val subject = "Обращение от ${formatter.format(System.currentTimeMillis())}"
+            val body = "Здравствуйте, ...\n\nМой ключ: $accessUrl"
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    "Здравствйте, ...\n\nМой ключ: $accessUrl"
-                )
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, body)
             }
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
+            } else {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW)
+                val data = Uri.parse(
+                    "mailto:$email?subject=" + Uri.encode(subject)
+                            + "&body=" + Uri.encode(body)
+                )
+                intent.setData(data)
+                startActivity(fallbackIntent)
             }
         }
     }

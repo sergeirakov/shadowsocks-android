@@ -23,16 +23,25 @@ package com.github.shadowsocks
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import io.appmetrica.analytics.AppMetrica
+import io.appmetrica.analytics.AppMetricaConfig
 
 class App : Application(), androidx.work.Configuration.Provider by Core {
     override fun onCreate() {
         super.onCreate()
         Core.init(this, MainActivity::class)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+
+        val config = AppMetricaConfig.newConfigBuilder(APP_METRICA_API_KEY).build()
+        AppMetrica.activate(this, config)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Core.updateNotificationChannels()
+    }
+
+    companion object {
+        private const val APP_METRICA_API_KEY = "dae05da9-a716-4b74-98f3-ec7a30630531"
     }
 }
