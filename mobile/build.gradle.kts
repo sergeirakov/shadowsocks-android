@@ -26,4 +26,5 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-simplemenu:1.1.0")
     implementation("com.twofortyfouram:android-plugin-api-for-locale:1.0.4")
     implementation("me.zhanghai.android.fastscroll:library:1.2.0")
+    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
 }

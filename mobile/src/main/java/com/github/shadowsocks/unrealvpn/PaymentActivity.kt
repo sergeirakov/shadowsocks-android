@@ -10,6 +10,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.github.shadowsocks.R
+import com.github.shadowsocks.advertisingId
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
@@ -23,10 +24,12 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+
 
         val webview = findViewById<WebView>(R.id.webview)
         val baseUrl = getString(R.string.unreal_vpn_payment_url)
@@ -36,12 +39,12 @@ class PaymentActivity : AppCompatActivity() {
         webview.webViewClient = listenerClient
         webview.getSettings().javaScriptEnabled = true
         webview.getSettings().javaScriptCanOpenWindowsAutomatically = true
-        val url = "$baseUrl?key=$keyEncoded&key_id=$keyId"
+        val url = "$baseUrl?key=$keyEncoded&key_id=$keyId&ads_id=$advertisingId"
         webview.loadUrl(url)
         Timber.d(url)
-
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
     }
 
     private fun onUrlChanged(url: String) {
