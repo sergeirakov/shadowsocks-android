@@ -22,18 +22,43 @@ package com.github.shadowsocks
 
 import android.app.Application
 import android.content.res.Configuration
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.github.shadowsocks.unrealvpn.AdIdProvider
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.AppMetricaConfig
 
+
+var advertisingId: String = "empty_ads_id"
 class App : Application(), androidx.work.Configuration.Provider by Core {
     override fun onCreate() {
         super.onCreate()
         Core.init(this, MainActivity::class)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
+
+        // Call the AdIdProvider to get the Advertising ID when the application is launched
+        AdIdProvider(this).getAdvertisingId(object : AdIdProvider.AdIdListener {
+            override fun onAdIdObtained(adId: String) {
+                // Save the Advertising ID to the global variable
+                advertisingId = adId
+
+                // Now you can use the adId variable as needed
+                // For example, you can access it globally in your application
+
+                // Print the Advertising ID to the console for testing
+                Log.d("AdvertisingId", "Advertising ID obtained when the application is launched: $adId")
+            }
+
+            override fun onAdIdError() {
+                // Handle the case where the Advertising ID couldn't be retrieved
+                Log.e("AdvertisingId", "Error obtaining Advertising ID when the application is launched")
+            }
+        })
+
         val config = AppMetricaConfig.newConfigBuilder(APP_METRICA_API_KEY).build()
         AppMetrica.activate(this, config)
+
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -41,7 +66,10 @@ class App : Application(), androidx.work.Configuration.Provider by Core {
         Core.updateNotificationChannels()
     }
 
+
+   
     companion object {
         private const val APP_METRICA_API_KEY = "dae05da9-a716-4b74-98f3-ec7a30630531"
     }
+
 }
