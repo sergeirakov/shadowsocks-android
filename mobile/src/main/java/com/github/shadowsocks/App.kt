@@ -25,6 +25,8 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.github.shadowsocks.unrealvpn.AdIdProvider
+import io.appmetrica.analytics.AppMetrica
+import io.appmetrica.analytics.AppMetricaConfig
 
 
 var advertisingId: String = "empty_ads_id"
@@ -33,6 +35,7 @@ class App : Application(), androidx.work.Configuration.Provider by Core {
         super.onCreate()
         Core.init(this, MainActivity::class)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+
 
         // Call the AdIdProvider to get the Advertising ID when the application is launched
         AdIdProvider(this).getAdvertisingId(object : AdIdProvider.AdIdListener {
@@ -52,11 +55,21 @@ class App : Application(), androidx.work.Configuration.Provider by Core {
                 Log.e("AdvertisingId", "Error obtaining Advertising ID when the application is launched")
             }
         })
+
+        val config = AppMetricaConfig.newConfigBuilder(APP_METRICA_API_KEY).build()
+        AppMetrica.activate(this, config)
+
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Core.updateNotificationChannels()
+    }
+
+
+   
+    companion object {
+        private const val APP_METRICA_API_KEY = "dae05da9-a716-4b74-98f3-ec7a30630531"
     }
 
 }
